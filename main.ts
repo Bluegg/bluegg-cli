@@ -5,48 +5,67 @@
 
 /* Imports */
 import { bold, cyan, parseArgs } from "./deps.ts";
-import { author, command, contact, description, name } from "./constants.ts";
-import { version } from "./version.ts";
-import { error } from "./src/libs/messages.ts";
-import { example, meta as exampleMeta } from "./src/example.ts";
+import { app, invalidSubcommand, missingSubcommand } from "./src/constants.ts";
+import { createDotfile } from "./src/dotfile.ts";
+import { error, warning } from "./src/libraries/messages.ts";
+import { fileExists } from "./src/libraries/filesystem.ts";
+import { database, meta as databaseMeta } from "./src/subcommands/database/database.ts";
 
 /* The command's instructions */
-const instructions = `${bold(cyan(`${name} ${version}`))}
-${bold(`${description}`)}
-Author: ${author} <${contact}>
+const instructions = `${bold(cyan(`${app.name} ${app.version}`))}
+${bold(`${app.description}`)}
+Author: ${app.author} <${app.contact}>
 
-${bold("Syntax:")} ${command} [subcommand] | [arguments]
+${bold("Syntax:")} ${app.command} [subcommand] [arguments]
 
 ${bold("Subcommands:")}
-
-${bold(cyan(`${exampleMeta.subcommand}`))}
-${exampleMeta.description}
+${bold(`${databaseMeta.subcommands.join(", ")}`)}	${databaseMeta.description}
 
 ${bold("Arguments:")}
-${bold("-v, --version")}		Displays the installed version of the application.
-${bold("-h, --help")}		Displays usage examples and supported syntax.`;
+${bold("-v, --version")}	Displays the installed version of the application.
+${bold("-h, --help")}	Displays usage examples and supported syntax.`;
 
 /* Get any arguments entered by the user */
 const args = parseArgs(Deno.args);
 
 /* Get the subcommand entered by the user */
-const subcommand = args._.shift();
+const subcommand = args._.shift() as string;
 
-/* Process the subcommand or argument entered by the user */
+/* Logic for the command's `--version` argument */
+const version = (): void => {
+	console.info(app.name, app.version);
+	Deno.exit();
+};
+
+/* Logic for the command's `--help` argument */
+const help = (): void => {
+	console.info(instructions);
+	Deno.exit();
+};
+
+/* Checks for the existence of the dotenv file */
+if ((await fileExists(`${Deno.cwd()}/.env`)) === false) {
+	warning(`There's no ${bold(".env")} file in this directory. Are you in the correct directory?`);
+}
+
+/* Checks for the existence of the application's dotfile and prompts the user to create one */
+if ((await fileExists(`${Deno.cwd()}/${app.dotfile}`)) === false) {
+	warning(`There's no ${bold(app.dotfile)} file in this directory.`);
+	const confirmed = confirm("Create one now? (Recommended)");
+	if (confirmed) {
+		await createDotfile();
+		Deno.exit();
+	}
+}
+
+/* Process the subcommands or arguments entered by the user */
 if (subcommand) {
-	if (subcommand === "example") example();
-	else {
-		error(
-			`"${subcommand}" is not a recognised subcommand. Run ${bold(`${command} --help`)} for help.`,
-		);
-	}
+	if (subcommand === "database" || subcommand === "db") database(args);
+	else error(invalidSubcommand(subcommand));
 } else {
-	if (args.v || args.version) console.info(name, version);
-	else if (args.h || args.help) console.info(instructions);
-	else {
-		error(
-			`Enter a recognised subcommand or argument(s). Run ${bold(`${command} --help`)} for help.`,
-		);
-	}
+	if (args.v || args.version) version();
+	else if (args.h || args.help) help();
+	else error(missingSubcommand());
+
 	Deno.exit();
 }

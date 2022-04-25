@@ -3,40 +3,26 @@
 <br />
 
 <div align="center">
-  <a href="https://github.com/kennyheard/bluegg-cli">
-    <img src="https://bluegg.co.uk/images/logo.svg" alt="The Project's Logo" width="160" style="background: white; padding: 1rem; border-radius: 1rem;">
-  </a>
-
-  <h3 align="center">Bluegg CLI</h3>
-  <p align="center">An awesome CLI tool to make development life at Bluegg a breeze! 🚀</p>
-
-  <div align="center">
-    <a href="https://github.com/Bluegg/bluegg-open-source-disclaimer">Open Source Disclaimer</a>
-  </div>
+    <a href="https://github.com/Bluegg/bluegg-cli">
+        <img src="https://bluegg.co.uk/images/logo.svg" alt="The Project's Logo" width="160">
+    </a>
+    <h3 align="center">Bluegg CLI</h3>
+    <p align="center">The command-line companion for worthy developers at Bluegg. 🤖</p>
+    <a align="center" href="https://github.com/Bluegg/bluegg-open-source-disclaimer">Open Source Disclaimer</a>
 </div>
 
 <br />
 
 <!-- GETTING STARTED -->
 
-## Requirements
+## Getting Started
 
 ### Homebrew
 
 Installation of this tool as a Formula using [Homebrew](https://brew.sh) is strongly recommended.
 
 ```sh
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-## Getting Started
-
-### Installation
-
-Install the Homebrew Formula.
-
-```sh
-brew install kennyheard/bluegg/bluegg-cli
+brew install Bluegg/bluegg/bluegg-cli
 ```
 
 ### Usage
@@ -52,7 +38,7 @@ bluegg --help
 You can update the Formula using Homebrew.
 
 ```sh
-brew upgrade kennyheard/bluegg/bluegg-cli
+brew upgrade Bluegg/bluegg/bluegg-cli
 ```
 
 Then confirm you're running the desired version.
@@ -63,40 +49,64 @@ bluegg --version
 
 ## For Developers
 
+### Requirements
+
+Install Deno
+
+```sh
+brew install deno
+```
+
+[Alternative installation instructions.](https://deno.land/manual/getting_started/installation)
+
 ### Making changes
 
-1. Clone this repo.
+1. Clone this repository.
 
 ```sh
-git clone git@github.com:kennyheard/bluegg-cli.git bluegg-cli
+git clone git@github.com:Bluegg/bluegg-cli.git bluegg-cli
 ```
 
-2. Before committing any changes, _always_ run Prettier at the project's root.
+2. Before committing any changes, _always_ run Deno's built-in linter at the project's root, and
+   resolve any issues.
 
 ```sh
-npm run prettier
+deno lint
 ```
 
-3. When ready for release, update the `app_version` value in `/library/config.sh`.
+3. Before committing any changes, _always_ run Deno's built-in formatter at the project's root.
 
-4. When all changes are committed, create a Tag and Release in GitHub. Both should follow the standard naming convention, E.G. `v1.2.3`. Use detailed release descriptions - following by the example of earlier releases.
+```sh
+deno fmt
+```
 
-5. Open the Release's Assets, and **make a note** of the "_Source code (tar.gz)_" URL for later. This will be needed when updating the Tap.
+4. When everything is ready for release, update the `version` value in
+   [`/src/version.ts`](/src/version.ts).
 
-6. Finish-up by updating [Bluegg's Homebrew Tap](https://github.com/kennyheard/homebrew-bluegg). Head to the repo for further instructions.
+5. Compile the code into a self-contained executable named `bluegg` at the project's root.
 
-<!-- COMMENT -->
+```sh
+deno compile --allow-read --allow-write --allow-run --allow-env --output bluegg main.ts
+```
 
-<br />
+6. Once all changes are committed, create a Tag and Release in GitHub. Both should follow the
+   standard SemVer naming convention, E.G. `v1.2.3`. Use detailed release descriptions, following by
+   the example of earlier releases.
 
-<h3 align="center">Happy Coding! 👋🏻</h3>
+7. Underneath the release notes, attach the previously generated `bluegg` binary.
+
+8. Open the Release's Assets, and **make a note** of the `bluegg` binary's URL. This will be needed
+   when updating the Tap.
+
+9. Finish-up by updating [Bluegg's Homebrew Tap](https://github.com/Bluegg/homebrew-bluegg). Head to
+   the repository for detailed instructions.
 
 <!-- BLUEGG LOGO -->
 
 <br />
 
 <p align="center">
-  <a href="https://bluegg.co.uk" target="_blank">
-    <img src="https://bluegg.co.uk/apple-touch-icon.png" alt="Logo" width="40" height="40" style="border-radius: 0.5rem;">
-  </a>
+    <a href="https://bluegg.co.uk" target="_blank">
+        <img src="https://bluegg.co.uk/apple-touch-icon.png" alt="Logo" width="40" height="40" style="border-radius: 0.5rem;">
+    </a>
 </p>
