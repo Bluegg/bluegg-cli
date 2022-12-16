@@ -1,85 +1,99 @@
-/*
-	Shell
-	Helper functions for shell-based functionality
-*/
-
-/* Imports */
 import { writeAll } from "../../deps.ts";
-import { env } from "../../src/constants.ts";
-import { validator } from "../helpers.ts";
-import { error } from "./messages.ts";
+import ErrorMessage from "./messages/ErrorMessage.ts";
 
-/* Executes a command in the local shell */
-export const execute = async (
-	command: string,
-	input?: string | null,
-	output?: string | null,
-): Promise<Deno.ProcessStatus> => {
-	if (!command) error("No command has been entered.", true);
+export default class Shell {
+	private command: string;
+	private input: string | undefined;
+	private output: string | undefined;
 
-	/* Regular expression to find spaces in a string *unless* the string is wrapped inside quotes */
-	const expression = / +(?=(?:(?:[^"]*"){2})*[^"]*$)/g;
+	/**
+	 * Sets up a shell that allows for the execution of commands.
+	 *
+	 * @param command The command to be executed.
+	 * @param input The filepath of the command's input.
+	 * @param output The filepath of the command's output.
+	 */
+	constructor(command: string, input?: string | undefined, output?: string | undefined) {
+		this.command = command;
+		this.input = input;
+		this.output = output;
 
-	/* The Deno subprocess */
-	const subprocess = Deno.run({
-		cmd: command.split(expression),
-		stdin: "piped",
-		stdout: "piped",
-		stderr: "piped",
-	});
-
-	/* If any input is provided, pass it to the subprocess */
-	if (input) {
-		await writeAll(subprocess.stdin, await Deno.readFile(input as string));
-		subprocess.stdin.close();
+		if (!command) new ErrorMessage("No command has been entered.", true);
 	}
 
-	/* Await and store the command's status, output, and error output */
-	const [processStatus, standardOutput, standardError] = await Promise.all([
-		subprocess.status(),
-		subprocess.output(),
-		subprocess.stderrOutput(),
-	]);
+	/**
+	 * Executes the given command in the current shell.
+	 *
+	 * @param command The command to be executed.
+	 * @returns The Deno process's status.
+	 */
+	private async execute(command: string) {
+		/* Regular expression to find spaces in a string *unless* the string is wrapped inside quotes. */
+		const expression = / +(?=(?:(?:[^"]*"){2})*[^"]*$)/g;
 
-	/* Decode the command's output and error output as text strings */
-	const standardOutputValue = new TextDecoder().decode(standardOutput);
-	const standardErrorValue = new TextDecoder().decode(standardError);
+		/* The Deno subprocess. */
+		const subprocess = Deno.run({
+			cmd: command.split(expression),
+			stdin: "piped",
+			stdout: "piped",
+			stderr: "piped",
+		});
 
-	/* If an error is returned, display the error output and exit */
-	if (standardErrorValue) error(standardErrorValue, true);
+		/* If any input is provided, pass it to the subprocess. */
+		if (this.input) {
+			await writeAll(subprocess.stdin, await Deno.readFile(this.input as string));
+			subprocess.stdin.close();
+		}
 
-	/* If any output is returned, display the output or write it to the file specified */
-	if (output && standardOutputValue) await Deno.writeTextFile(output, standardOutputValue);
-	else if (standardOutputValue) console.log(standardOutputValue);
+		/* Await and store the command's status, output, and error output. */
+		const [processStatus, standardOutput, standardError] = await Promise.all([
+			subprocess.status(),
+			subprocess.output(),
+			subprocess.stderrOutput(),
+		]);
 
-	return processStatus;
-};
+		/* Decode the command's output and error output as text strings. */
+		const standardOutputValue = new TextDecoder().decode(standardOutput);
+		const standardErrorValue = new TextDecoder().decode(standardError);
 
-/* Executes a command on the specified Docker container */
-export const dockerExecute = async (
-	command: string,
-	input?: string | null,
-	output?: string | null,
-): Promise<Deno.ProcessStatus> => {
-	if (!command) error("No command has been entered.", true);
+		/* If an error is returned, display the error output and exit. */
+		if (standardErrorValue) new ErrorMessage(standardErrorValue, true);
 
-	/* Get any variables required by the command */
-	const container = validator("Docker container", env.docker.container);
+		/* If any output is returned, display the output or write it to the file specified. */
+		if (this.output && standardOutputValue) {
+			await Deno.writeTextFile(this.output, standardOutputValue);
+		} else if (standardOutputValue) console.log(standardOutputValue);
 
-	/* Execute the command and return its status */
-	return await execute(`docker exec -i ${container} ${command}`, input, output);
-};
+		return processStatus;
+	}
 
-/* Executes a command on the specified remote server */
-export const remoteExecute = async (
-	command: string,
-	username: string,
-	server: string,
-	input?: string | null,
-	output?: string | null,
-): Promise<Deno.ProcessStatus> => {
-	if (!command) error("No command has been entered.", true);
+	/**
+	 * Executes the given command within the user's local shell.
+	 *
+	 * @returns The Deno process's status.
+	 */
+	async executeInLocal() {
+		return await this.execute(this.command);
+	}
 
-	/* Execute the command and return its status */
-	return await execute(`ssh ${username}@${server} ${command}`, input, output);
-};
+	/**
+	 * Executes the given command within the Docker container's shell.
+	 *
+	 * @param container The name of the Docker container in which the command should be executed on.
+	 * @returns The Deno process's status.
+	 */
+	async executeInDocker(container: string) {
+		return await this.execute(`docker exec -i ${container} ${this.command}`);
+	}
+
+	/**
+	 * Executes the given command on the remote server.
+	 *
+	 * @param username The SSH username of the remote server.
+	 * @param address The SSH address of the remote server.
+	 * @returns The Deno process's status.
+	 */
+	async executeOnRemote(username: string, address: string) {
+		return await this.execute(`ssh ${username}@${address} ${this.command}`);
+	}
+}

@@ -1,12 +1,31 @@
-/*
-	Types
-	Typescript types and interfaces referenced throughout the application
-*/
+import { Args } from "./deps.ts";
 
-export const localEnvironments = ["dev"];
-export const remoteEnvironments = ["staging", "production"];
-export const environments = [...localEnvironments, ...remoteEnvironments];
-export type Environment = typeof environments[number];
+export type Environment = "dev" | "staging" | "production";
 
-export const projects = ["blueprint", "launch"];
-export type Project = typeof projects[number];
+export type Command = {
+	/** The command's callable function. */
+	run: (args: Args) => void;
+	/** A list of the command's aliases. */
+	aliases: string[];
+	/** A brief description of the command's purpose. */
+	description: string;
+	/** A list of the command's subcommands. */
+	subcommands?: Command[];
+	/** A list of the command's arguments. */
+	arguments?: Argument[];
+	/** A list of the command's optional arguments. */
+	optionalArguments?: Argument[];
+	/** Messages to be displayed to the user under specific circumstances. */
+	// messages?: Record<string, unknown>;
+};
+
+export type Argument = {
+	/** The argument's callable function. */
+	run: (command: Command, args: Args) => void;
+	/** A brief description of the argument's purpose. */
+	description: string;
+	/** A list of accepted flags for the argument. */
+	flags: string[];
+	/** Messages to be displayed to the user under certain circumstances. */
+	// messages?: Record<string, string>;
+};

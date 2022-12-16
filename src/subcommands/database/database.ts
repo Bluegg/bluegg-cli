@@ -1,51 +1,26 @@
-/*
-	Database
-	The application's `database` subcommand
-*/
+import { Args } from "../../../deps.ts";
+import { Command } from "../../../types.ts";
+import bootstrap from "../../bootstrap.ts";
+import backup from "./backup.ts";
+import pull from "./pull.ts";
+import push from "./push.ts";
 
-/* Imports */
-import { Args, bold } from "../../../deps.ts";
-import { additionalSubcommandRequired, invalidSubcommand } from "../../../src/constants.ts";
-import { error } from "../../../src/libraries/messages.ts";
-import { meta as pushMeta, push } from "./push.ts";
-import { meta as pullMeta, pull } from "./pull.ts";
-
-/* Constants */
-export const meta = {
-	subcommands: ["database", "db"],
+/** The command definition. */
+const command: Command = {
+	run: run,
+	aliases: ["database", "db"],
 	description: "Manage local and remote databases for a chosen site.",
+	subcommands: [push, pull, backup],
 };
 
-/* The subcommand's instructions */
-const instructions = `
-${bold("Description:")} ${meta.description}
+/**
+ * Process the command(s) and/or argument(s) entered by the user.
+ *
+ * @param args The arguments entered by the user.
+ */
+function run(args: Args) {
+	const userEnteredCommand = args._.shift() as string;
+	bootstrap(command, userEnteredCommand, args);
+}
 
-${bold("Subcommands:")}
-${bold(`${pushMeta.subcommands.join(", ")}`)}	${pushMeta.description}
-${bold(`${pullMeta.subcommands.join(", ")}`)}	${pullMeta.description}
-
-${bold("Arguments:")}
-${bold("-h, --help")}	Displays usage examples and supported syntax.`;
-
-/* Logic for the subcommand's `--help` argument */
-const help = (): void => {
-	console.info(instructions);
-	Deno.exit();
-};
-
-/* Logic for the subcommand */
-export const database = (args: Args): void => {
-	/* Get any additional subcommands entered by the user */
-	const subcommand = args._.shift() as string;
-
-	/* Process the subcommands or arguments entered by the user */
-	if (subcommand) {
-		if (subcommand === "push") push(args);
-		else if (subcommand === "pull") pull(args);
-		else error(invalidSubcommand(subcommand));
-	} else {
-		if (args.h || args.help) help();
-		else error(additionalSubcommandRequired());
-		Deno.exit();
-	}
-};
+export default command;

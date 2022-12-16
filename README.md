@@ -51,7 +51,7 @@ bluegg --version
 
 ### Requirements
 
-Install Deno
+Install Deno.
 
 ```sh
 brew install deno
