@@ -68,13 +68,13 @@ export const env = {
 		serverAddress: (environment: Environment): string => {
 			return Deno.env.get(`${environment.toUpperCase()}_SERVER_ADDRESS`) as string;
 		},
-		/** The environment server's port. */
-		serverPort: (environment: Environment): string => {
-			return Deno.env.get(`${environment.toUpperCase()}_SERVER_PORT`) as string;
-		},
 		/** The environment server's SSH username. */
 		serverUsername: (environment: Environment): string => {
 			return Deno.env.get(`${environment.toUpperCase()}_SERVER_USERNAME`) as string;
+		},
+		/** The environment server's site directory. */
+		siteDirectory: (environment: Environment): string => {
+			return Deno.env.get(`${environment.toUpperCase()}_SITE_DIRECTORY`) as string;
 		},
 		/** The environment server's database name. */
 		databaseName: (environment: Environment): string => {
@@ -97,6 +97,14 @@ export const defaults = {
 	defaultServerUsername: "forge",
 	/** The default database username used for prompts. */
 	defaultDatabaseUsername: "forge",
-	/** The default directory in which database exports should be stored. */
-	defaultDatabaseExportsDirectory: `${Deno.cwd()}/databases`,
+	/** The default directory in which the remote sites are located. */
+	defaultRemoteSiteDirectory: "/home/forge",
+	/** The default directory in which database exports should be located. */
+	defaultDatabaseExportsDirectory: `databases`,
+	/** The default directory in which local assets should be located. */
+	defaultLocalAssetsDirectory: `web/assets`,
+	/** The default directory in which remote assets should be located. */
+	defaultRemoteAssetsDirectory: (environment: Environment): string => {
+		return `${env.dotfile.serverAddress(environment)}/shared/web/assets`;
+	},
 };

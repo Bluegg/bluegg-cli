@@ -42,6 +42,11 @@ export default async function createDotfile() {
 		defaults.defaultServerUsername,
 	);
 
+	const stagingSiteDirectory = prompt(
+		`Enter the ${bold(italic("staging"))} server's site directory:`,
+		defaults.defaultRemoteSiteDirectory,
+	);
+
 	const stagingDatabaseName = prompt(
 		`Enter the ${bold(italic("staging"))} server's database name:`,
 		projectName ? `${projectName}_staging` : undefined,
@@ -71,6 +76,11 @@ export default async function createDotfile() {
 		projectName ? `${projectName}_production` : undefined,
 	);
 
+	const productionSiteDirectory = prompt(
+		`Enter the ${bold(italic("production"))} server's site directory:`,
+		defaults.defaultRemoteSiteDirectory,
+	);
+
 	const productionDatabaseUsername = prompt(
 		`Enter the ${bold(italic("production"))} server's database username:`,
 		defaults.defaultDatabaseUsername,
@@ -87,12 +97,14 @@ export default async function createDotfile() {
 		"\n# Details and credentials for the project's staging server",
 		`STAGING_SERVER_ADDRESS=${stagingServerAddress}`,
 		`STAGING_SERVER_USERNAME=${stagingServerUsername}`,
+		`STAGING_SITE_DIRECTORY=${stagingSiteDirectory}`,
 		`STAGING_DATABASE_NAME=${stagingDatabaseName}`,
 		`STAGING_DATABASE_USERNAME=${stagingDatabaseUsername}`,
 		`STAGING_DATABASE_PASSWORD=${stagingDatabasePassword}`,
 		"\n# Details and credentials for the project's production server",
 		`PRODUCTION_SERVER_ADDRESS=${productionServerAddress}`,
 		`PRODUCTION_SERVER_USERNAME=${productionServerUsername}`,
+		`PRODUCTION_SITE_DIRECTORY=${productionSiteDirectory}`,
 		`PRODUCTION_DATABASE_NAME=${productionDatabaseName}`,
 		`PRODUCTION_DATABASE_USERNAME=${productionDatabaseUsername}`,
 		`PRODUCTION_DATABASE_PASSWORD=${productionDatabasePassword}`,

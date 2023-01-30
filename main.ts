@@ -3,6 +3,7 @@ import help from "./src/arguments/help.ts";
 import version from "./src/arguments/version.ts";
 import bootstrap from "./src/bootstrap.ts";
 import { app } from "./src/constants.ts";
+import assets from "./src/subcommands/assets/assets.ts";
 import database from "./src/subcommands/database/database.ts";
 
 import { Command } from "./types.ts";
@@ -12,7 +13,7 @@ const command: Command = {
 	run: run,
 	aliases: [],
 	description: app.description,
-	subcommands: [database],
+	subcommands: [database, assets],
 	optionalArguments: [version, help],
 };
 
