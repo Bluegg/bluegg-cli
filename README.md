@@ -38,7 +38,7 @@ bluegg --help
 You can update the Formula using Homebrew.
 
 ```sh
-brew upgrade Bluegg/bluegg/bluegg-cli
+brew upgrade bluegg-cli
 ```
 
 Then confirm you're running the desired version.
