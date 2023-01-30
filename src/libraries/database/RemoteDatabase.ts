@@ -51,7 +51,7 @@ export default class RemoteDatabase {
 	 *
 	 * @returns The datestamp string.
 	 */
-	_datestamp() {
+	private _datestamp() {
 		const datestamp = new Date().toISOString().split("T")[0];
 
 		return datestamp;
@@ -62,7 +62,7 @@ export default class RemoteDatabase {
 	 *
 	 * @returns The timestamp string.
 	 */
-	_timestamp() {
+	private _timestamp() {
 		const timestamp = new Date().toLocaleTimeString().replaceAll(":", "-");
 
 		return timestamp;

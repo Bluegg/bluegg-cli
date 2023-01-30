@@ -41,7 +41,7 @@ export default class LocalDatabase {
 	 *
 	 * @returns The datestamp string.
 	 */
-	_datestamp() {
+	private _datestamp() {
 		const datestamp = new Date().toISOString().split("T")[0];
 
 		return datestamp;
@@ -52,7 +52,7 @@ export default class LocalDatabase {
 	 *
 	 * @returns The timestamp string.
 	 */
-	_timestamp() {
+	private _timestamp() {
 		const timestamp = new Date().toLocaleTimeString().replaceAll(":", "-");
 
 		return timestamp;
@@ -63,7 +63,7 @@ export default class LocalDatabase {
 	 *
 	 * @returns The newly constructed filename.
 	 */
-	_filename() {
+	private _filename() {
 		return `${this.timestamp}_${this.name}.sql`;
 	}
 
@@ -72,7 +72,7 @@ export default class LocalDatabase {
 	 *
 	 * @returns The database export's filepath.
 	 */
-	async _filepath() {
+	private async _filepath() {
 		const path =
 			`${options.defaultDatabaseExportsDirectory}/${this.environment}/${this.datestamp}`;
 

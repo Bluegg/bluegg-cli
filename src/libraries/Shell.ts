@@ -72,7 +72,7 @@ export default class Shell {
 	 *
 	 * @returns The Deno process's status.
 	 */
-	async executeInLocal() {
+	public async executeInLocal() {
 		return await this.execute(this.command);
 	}
 
@@ -82,7 +82,7 @@ export default class Shell {
 	 * @param container The name of the Docker container in which the command should be executed on.
 	 * @returns The Deno process's status.
 	 */
-	async executeInDocker(container: string) {
+	public async executeInDocker(container: string) {
 		return await this.execute(`docker exec -i ${container} ${this.command}`);
 	}
 
@@ -93,7 +93,7 @@ export default class Shell {
 	 * @param address The SSH address of the remote server.
 	 * @returns The Deno process's status.
 	 */
-	async executeOnRemote(username: string, address: string) {
+	public async executeOnRemote(username: string, address: string) {
 		return await this.execute(`ssh ${username}@${address} ${this.command}`);
 	}
 }
