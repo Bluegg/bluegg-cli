@@ -15,8 +15,6 @@ export type Command = {
 	arguments?: Argument[];
 	/** A list of the command's optional arguments. */
 	optionalArguments?: Argument[];
-	/** Messages to be displayed to the user under specific circumstances. */
-	// messages?: Record<string, unknown>;
 };
 
 export type Argument = {
@@ -26,6 +24,6 @@ export type Argument = {
 	description: string;
 	/** A list of accepted flags for the argument. */
 	flags: string[];
-	/** Messages to be displayed to the user under certain circumstances. */
-	// messages?: Record<string, string>;
+	/** The value of the argument as entered by the user. */
+	value?: string;
 };
