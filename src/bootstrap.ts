@@ -32,10 +32,10 @@ export default function bootstrap(command: Command, userEnteredCommand: string, 
 	/** Run the callable functions of any valid optional arguments. */
 	const runValidOptionalArguments = () => {
 		if (command.optionalArguments) {
-			/* Navigate through the list of required arguments in order to determine if the user has
+			/* Navigate through the list of optional arguments in order to determine if the user has
             entered any of the arguments in no specific order. */
 			command.optionalArguments.filter((argument) => {
-				/* Determine if any of the required arguments have been provided by the user. */
+				/* Determine if any of the optional arguments have been provided by the user. */
 				const argumentProvided = argument.flags.some((key) =>
 					Object.keys(args).includes(key)
 				);
@@ -50,9 +50,8 @@ export default function bootstrap(command: Command, userEnteredCommand: string, 
 		}
 	};
 
-	/** Check if the user has entered any required arguments,
-	 * test the validity of each, and run their callable functions. */
-	const checkValidRequiredArguments = () => {
+	/** Validate and run the callable functions of any required arguments. */
+	const runValidRequiredArguments = () => {
 		if (command.arguments) {
 			/* Navigate through the list of required arguments in order to determine if the user has
             entered any of the arguments in no specific order. */
@@ -61,12 +60,6 @@ export default function bootstrap(command: Command, userEnteredCommand: string, 
 				const argumentProvided = argument.flags.some((key) =>
 					Object.keys(args).includes(key)
 				);
-
-				/* If the user has requested help at any point within the argument entry process,
-                display the usage instructions instead of throwing an error. Checking for the help
-                request at this point in the validation process ensures that it will ignore any
-                validation errors within the argument's own callable function. */
-				if (userNeedsHelp) helpUser();
 
 				/* If the user-entered argument is valid, run its callable function, otherwise inform
                 the user that it's invalid. */
@@ -108,7 +101,14 @@ export default function bootstrap(command: Command, userEnteredCommand: string, 
 		return true;
 	}
 
-	checkValidRequiredArguments();
+	/* If the user has requested help at any point within the argument entry process,
+    display the usage instructions instead of throwing an error. Checking for the help
+    request at this point in the validation process ensures that it will ignore any
+    validation errors within the argument's own callable function. */
+	if (userNeedsHelp) helpUser();
+
+	runValidRequiredArguments();
+	if (validOptionalArguments) runValidOptionalArguments();
 
 	return true;
 }
