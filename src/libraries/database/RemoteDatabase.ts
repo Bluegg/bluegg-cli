@@ -14,12 +14,13 @@ export default class RemoteDatabase {
 	private password: string;
 	private name: string;
 	private environment: Environment;
+	private options: string;
 	private datestamp: string;
 	private timestamp: string;
 	public filename: string;
 	public filepath: Promise<string>;
 
-	constructor(environment: Environment) {
+	constructor(environment: Environment, options?: string) {
 		this.serverUsername = promptIfEmpty(
 			"Server SSH Username",
 			env.dotfile.serverUsername(environment),
@@ -38,6 +39,7 @@ export default class RemoteDatabase {
 		);
 		this.name = promptIfEmpty("Remote database name", env.dotfile.databaseName(environment));
 		this.environment = environment;
+		this.options = options ?? "";
 		this.datestamp = this._datestamp();
 		this.timestamp = this._timestamp();
 		this.filename = this._filename();
@@ -99,7 +101,8 @@ export default class RemoteDatabase {
 			new ErrorMessage(`The following file does not exist: ${filepath}`);
 		}
 
-		const command = `mysql -u ${this.username} -p${this.password} ${this.name}`;
+		const command =
+			`MYSQL_PWD=${this.password} mysql -u ${this.username} ${this.name} ${this.options}`;
 
 		const shell = new Shell(command, filepath);
 		const process = await shell.executeOnRemote(this.serverUsername, this.serverAddress);
@@ -117,7 +120,8 @@ export default class RemoteDatabase {
 	 * @returns The exported SQL file's filepath.
 	 */
 	async export() {
-		const command = `mysqldump -u ${this.username} -p${this.password} ${this.name}`;
+		const command =
+			`MYSQL_PWD=${this.password} mysqldump -u ${this.username} ${this.name} ${this.options}`;
 		const filepath = await this.filepath;
 
 		const shell = new Shell(command, undefined, filepath);

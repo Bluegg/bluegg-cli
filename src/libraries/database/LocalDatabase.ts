@@ -15,12 +15,13 @@ export default class LocalDatabase {
 	private password: string;
 	private name: string;
 	private environment: Environment;
+	private options: string;
 	private datestamp: string;
 	private timestamp: string;
 	public filename: string;
 	public filepath: Promise<string>;
 
-	constructor() {
+	constructor(options?: string) {
 		this.container = promptIfEmpty("Docker container", env.docker.container);
 		this.server = promptIfEmpty("Local database server address", env.database.server);
 		this.port = promptIfEmpty("Local database server port", env.database.port);
@@ -28,6 +29,7 @@ export default class LocalDatabase {
 		this.password = promptIfEmpty("Local database password", env.database.password);
 		this.name = promptIfEmpty("Local database name", env.database.name);
 		this.environment = "dev";
+		this.options = options ?? "";
 		this.datestamp = this._datestamp();
 		this.timestamp = this._timestamp();
 		this.filename = this._filename();
@@ -109,7 +111,7 @@ export default class LocalDatabase {
 	 */
 	async export() {
 		const command =
-			`mysqldump -h ${this.server} -P ${this.port} -u ${this.username} -p${this.password} ${this.name}`;
+			`mysqldump -h ${this.server} -P ${this.port} -u ${this.username} -p${this.password} ${this.name} ${this.options}`;
 		const filepath = await this.filepath;
 
 		const shell = new Shell(command, undefined, filepath);

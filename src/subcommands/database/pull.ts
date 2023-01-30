@@ -1,6 +1,6 @@
 import { Args, bold, gray, italic } from "../../../deps.ts";
 import { Command, Environment } from "../../../types.ts";
-import environment from "../../arguments/environment.ts";
+import options from "../../arguments/options.ts";
 import remoteEnvironment from "../../arguments/remoteEnvironment.ts";
 import bootstrap from "../../bootstrap.ts";
 import LocalDatabase from "../../libraries/database/LocalDatabase.ts";
@@ -12,7 +12,7 @@ const command: Command = {
 	aliases: ["pull", "down"],
 	description: "Pull a remote database to a local database server.",
 	arguments: [remoteEnvironment],
-	optionalArguments: [],
+	optionalArguments: [options],
 };
 
 /**
@@ -25,6 +25,7 @@ async function run(args: Args) {
 	bootstrap(command, userEnteredCommand, args);
 
 	const userEnteredEnvironment = remoteEnvironment.value as Environment;
+	const userEnteredOptions = options.value;
 
 	const confirmed = confirm(
 		`Overwrite the ${bold(italic("local"))} database with the ${
@@ -35,8 +36,8 @@ async function run(args: Args) {
 	);
 	if (!confirmed) return false;
 
-	const remoteDatabase = new RemoteDatabase(userEnteredEnvironment);
-	const localDatabase = new LocalDatabase();
+	const remoteDatabase = new RemoteDatabase(userEnteredEnvironment, userEnteredOptions);
+	const localDatabase = new LocalDatabase(userEnteredOptions);
 
 	const remoteDatabaseExport = await remoteDatabase.export();
 	const _localDatabaseExport = await localDatabase.export();
