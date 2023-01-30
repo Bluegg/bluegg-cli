@@ -1,6 +1,6 @@
 import { gray } from "../../../deps.ts";
 import { Environment } from "../../../types.ts";
-import { defaults, env } from "../../constants.ts";
+import { defaults, dotfile } from "../../constants.ts";
 import doesFileExist from "../../utilities/doesFileExist.ts";
 import promptIfEmpty from "../../utilities/promptIfEmpty.ts";
 import ErrorMessage from "../messages/ErrorMessage.ts";
@@ -23,21 +23,21 @@ export default class RemoteDatabase {
 	constructor(environment: Environment, options?: string) {
 		this.serverUsername = promptIfEmpty(
 			"Server SSH Username",
-			env.dotfile.serverUsername(environment),
+			dotfile.serverUsername(environment),
 		);
 		this.serverAddress = promptIfEmpty(
 			"Server SSH address",
-			env.dotfile.serverAddress(environment),
+			dotfile.serverAddress(environment),
 		);
 		this.username = promptIfEmpty(
 			"Remote database username",
-			env.dotfile.databaseUsername(environment),
+			dotfile.databaseUsername(environment),
 		);
 		this.password = promptIfEmpty(
 			"Remote database password",
-			env.dotfile.databasePassword(environment),
+			dotfile.databasePassword(environment),
 		);
-		this.name = promptIfEmpty("Remote database name", env.dotfile.databaseName(environment));
+		this.name = promptIfEmpty("Remote database name", dotfile.databaseName(environment));
 		this.environment = environment;
 		this.options = options ?? "";
 		this.datestamp = this._datestamp();

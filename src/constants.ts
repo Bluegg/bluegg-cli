@@ -30,9 +30,6 @@ export const remoteEnvironments: Environment[] = ["staging", "production"];
 await doRequiredFilesExist();
 await exportEnvironmentVariables(".env");
 
-await doesDotfileExist();
-await exportEnvironmentVariables(app.dotfile);
-
 /** The project's environment variables represented as an object. */
 export const env = {
 	docker: {
@@ -63,31 +60,36 @@ export const env = {
 		/** The database's password. */
 		password: Deno.env.get("CRAFT_DB_PASSWORD") ?? Deno.env.get("DB_PASSWORD") ?? null,
 	},
-	dotfile: {
-		/** The environment server's address or hostname. */
-		serverAddress: (environment: Environment): string => {
-			return Deno.env.get(`${environment.toUpperCase()}_SERVER_ADDRESS`) as string;
-		},
-		/** The environment server's SSH username. */
-		serverUsername: (environment: Environment): string => {
-			return Deno.env.get(`${environment.toUpperCase()}_SERVER_USERNAME`) as string;
-		},
-		/** The environment server's site directory. */
-		siteDirectory: (environment: Environment): string => {
-			return Deno.env.get(`${environment.toUpperCase()}_SITE_DIRECTORY`) as string;
-		},
-		/** The environment server's database name. */
-		databaseName: (environment: Environment): string => {
-			return Deno.env.get(`${environment.toUpperCase()}_DATABASE_NAME`) as string;
-		},
-		/** The environment server's database username. */
-		databaseUsername: (environment: Environment): string => {
-			return Deno.env.get(`${environment.toUpperCase()}_DATABASE_USERNAME`) as string;
-		},
-		/** The environment server's database password. */
-		databasePassword: (environment: Environment): string => {
-			return Deno.env.get(`${environment.toUpperCase()}_DATABASE_PASSWORD`) as string;
-		},
+};
+
+await doesDotfileExist();
+await exportEnvironmentVariables(app.dotfile);
+
+/** The project's dotfile variables represented as an object. */
+export const dotfile = {
+	/** The environment server's address or hostname. */
+	serverAddress: (environment: Environment): string => {
+		return Deno.env.get(`${environment.toUpperCase()}_SERVER_ADDRESS`) as string;
+	},
+	/** The environment server's SSH username. */
+	serverUsername: (environment: Environment): string => {
+		return Deno.env.get(`${environment.toUpperCase()}_SERVER_USERNAME`) as string;
+	},
+	/** The environment server's site directory. */
+	siteDirectory: (environment: Environment): string => {
+		return Deno.env.get(`${environment.toUpperCase()}_SITE_DIRECTORY`) as string;
+	},
+	/** The environment server's database name. */
+	databaseName: (environment: Environment): string => {
+		return Deno.env.get(`${environment.toUpperCase()}_DATABASE_NAME`) as string;
+	},
+	/** The environment server's database username. */
+	databaseUsername: (environment: Environment): string => {
+		return Deno.env.get(`${environment.toUpperCase()}_DATABASE_USERNAME`) as string;
+	},
+	/** The environment server's database password. */
+	databasePassword: (environment: Environment): string => {
+		return Deno.env.get(`${environment.toUpperCase()}_DATABASE_PASSWORD`) as string;
 	},
 };
 
@@ -105,6 +107,6 @@ export const defaults = {
 	defaultLocalAssetsDirectory: `web/assets`,
 	/** The default directory in which remote assets should be located. */
 	defaultRemoteAssetsDirectory: (environment: Environment): string => {
-		return `${env.dotfile.serverAddress(environment)}/shared/web/assets`;
+		return `${dotfile.serverAddress(environment)}/shared/web/assets`;
 	},
 };

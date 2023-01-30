@@ -1,6 +1,6 @@
 import { gray } from "../../../deps.ts";
 import { Environment } from "../../../types.ts";
-import { defaults, env } from "../../constants.ts";
+import { defaults, dotfile } from "../../constants.ts";
 import promptIfEmpty from "../../utilities/promptIfEmpty.ts";
 import ErrorMessage from "../messages/ErrorMessage.ts";
 import SuccessMessage from "../messages/SuccessMessage.ts";
@@ -19,11 +19,11 @@ export default class RemoteSync {
 	constructor(environment: Environment, source?: string, destination?: string, options?: string) {
 		this.serverUsername = promptIfEmpty(
 			"Server SSH Username",
-			env.dotfile.serverUsername(environment),
+			dotfile.serverUsername(environment),
 		);
 		this.serverAddress = promptIfEmpty(
 			"Server SSH address",
-			env.dotfile.serverAddress(environment),
+			dotfile.serverAddress(environment),
 		);
 		this.environment = environment;
 		this.source = source;
@@ -50,7 +50,7 @@ export default class RemoteSync {
 	 * @returns The remote assets filepath.
 	 */
 	private _remoteFilepath() {
-		const siteDirectory = env.dotfile.siteDirectory(this.environment);
+		const siteDirectory = dotfile.siteDirectory(this.environment);
 		const assetsDirectory = defaults.defaultRemoteAssetsDirectory(this.environment);
 		const path = `${siteDirectory}/${assetsDirectory}`;
 
