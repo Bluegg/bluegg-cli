@@ -37,7 +37,7 @@ await exportEnvironmentVariables(app.dotfile);
 export const env = {
 	docker: {
 		/** The Docker container's name. */
-		container: Deno.env.get("DOCKER_CONTAINER") ?? null,
+		container: Deno.env.get("DOCKER_CONTAINER") ?? undefined,
 	},
 	project: {
 		/** The project's primary site URL. */
@@ -91,8 +91,8 @@ export const env = {
 	},
 };
 
-/** The application's options. */
-export const options = {
+/** The application's defaults. */
+export const defaults = {
 	/** The default server SSH username used for prompts. */
 	defaultServerUsername: "forge",
 	/** The default database username used for prompts. */

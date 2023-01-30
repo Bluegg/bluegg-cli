@@ -1,5 +1,5 @@
 import { bold, italic } from "../deps.ts";
-import { app, env, options } from "../src/constants.ts";
+import { app, defaults, env } from "../src/constants.ts";
 import InfoMessage from "./libraries/messages/InfoMessage.ts";
 import SuccessMessage from "./libraries/messages/SuccessMessage.ts";
 import WarningMessage from "./libraries/messages/WarningMessage.ts";
@@ -39,7 +39,7 @@ export default async function createDotfile() {
 
 	const stagingServerUsername = prompt(
 		`Enter the ${bold(italic("staging"))} server's SSH username:`,
-		options.defaultServerUsername,
+		defaults.defaultServerUsername,
 	);
 
 	const stagingDatabaseName = prompt(
@@ -49,7 +49,7 @@ export default async function createDotfile() {
 
 	const stagingDatabaseUsername = prompt(
 		`Enter the ${bold(italic("staging"))} server's database username:`,
-		options.defaultDatabaseUsername,
+		defaults.defaultDatabaseUsername,
 	);
 
 	const stagingDatabasePassword = prompt(
@@ -73,7 +73,7 @@ export default async function createDotfile() {
 
 	const productionDatabaseUsername = prompt(
 		`Enter the ${bold(italic("production"))} server's database username:`,
-		options.defaultDatabaseUsername,
+		defaults.defaultDatabaseUsername,
 	);
 
 	const productionDatabasePassword = prompt(

@@ -1,6 +1,6 @@
 import { gray } from "../../../deps.ts";
 import { Environment } from "../../../types.ts";
-import { env, options } from "../../constants.ts";
+import { defaults, env } from "../../constants.ts";
 import doesFileExist from "../../utilities/doesFileExist.ts";
 import promptIfEmpty from "../../utilities/promptIfEmpty.ts";
 import ErrorMessage from "../messages/ErrorMessage.ts";
@@ -84,7 +84,7 @@ export default class RemoteDatabase {
 	 */
 	private async _filepath() {
 		const path =
-			`${options.defaultDatabaseExportsDirectory}/${this.environment}/${this.datestamp}`;
+			`${defaults.defaultDatabaseExportsDirectory}/${this.environment}/${this.datestamp}`;
 
 		if ((await doesFileExist(path)) === false) await Deno.mkdir(path, { recursive: true });
 		return `${path}/${this.filename}`;
