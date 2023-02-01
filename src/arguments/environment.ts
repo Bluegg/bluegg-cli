@@ -19,7 +19,6 @@ const argument: Argument = {
  */
 function run(_command: Command, args: Args): Environment {
 	const environment = getArgumentValue(argument, args) as Environment;
-	argument.value = environment;
 
 	if (typeof environment !== "string") {
 		new ErrorMessage("No environment has been entered.", true);

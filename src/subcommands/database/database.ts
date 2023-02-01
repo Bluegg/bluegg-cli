@@ -18,9 +18,9 @@ const command: Command = {
  *
  * @param args The arguments entered by the user.
  */
-function run(args: Args) {
+async function run(args: Args) {
 	const userEnteredCommand = args._.shift() as string;
-	bootstrap(command, userEnteredCommand, args);
+	await bootstrap(command, userEnteredCommand, args);
 }
 
 export default command;

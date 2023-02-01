@@ -1,6 +1,6 @@
 import { gray } from "../../../deps.ts";
 import { Environment } from "../../../types.ts";
-import { defaults, env } from "../../constants.ts";
+import { defaults, dotfile, env } from "../../constants.ts";
 import doesFileExist from "../../utilities/doesFileExist.ts";
 import promptIfEmpty from "../../utilities/promptIfEmpty.ts";
 import ErrorMessage from "../messages/ErrorMessage.ts";
@@ -22,7 +22,7 @@ export default class LocalDatabase {
 	public filepath: Promise<string>;
 
 	constructor(options?: string) {
-		this.container = promptIfEmpty("Docker container", env.docker.container);
+		this.container = promptIfEmpty("Docker container", dotfile.docker.container);
 		this.server = promptIfEmpty("Local database server address", env.database.server);
 		this.port = promptIfEmpty("Local database server port", env.database.port);
 		this.username = promptIfEmpty("Local database username", env.database.username);

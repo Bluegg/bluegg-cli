@@ -18,7 +18,6 @@ const argument: Argument = {
  */
 function run(_command: Command, args: Args) {
 	const options = getArgumentValue(argument, args).toString();
-	argument.value = options;
 
 	console.log(gray(`Passing the following options to the shell: ${options}`));
 

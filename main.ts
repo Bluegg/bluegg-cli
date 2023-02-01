@@ -28,8 +28,8 @@ const userEnteredCommand = userEnteredArgs._.shift() as string;
  *
  * @param args The arguments entered by the user.
  */
-function run(args: Args) {
-	bootstrap(command, userEnteredCommand, args);
+async function run(args: Args) {
+	await bootstrap(command, userEnteredCommand, args);
 }
 
 command.run(userEnteredArgs);

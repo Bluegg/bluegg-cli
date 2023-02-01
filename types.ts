@@ -4,7 +4,7 @@ export type Environment = "dev" | "staging" | "production";
 
 export type Command = {
 	/** The command's callable function. */
-	run: (args: Args) => void;
+	run: (args: Args) => Promise<unknown>;
 	/** A list of the command's aliases. */
 	aliases: string[];
 	/** A brief description of the command's purpose. */
@@ -24,6 +24,4 @@ export type Argument = {
 	description: string;
 	/** A list of accepted flags for the argument. */
 	flags: string[];
-	/** The value of the argument as entered by the user. */
-	value?: string;
 };

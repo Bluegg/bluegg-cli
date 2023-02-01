@@ -1,6 +1,4 @@
 import { Environment } from "../types.ts";
-import doesDotfileExist from "./utilities/doesDotfileExist.ts";
-import doRequiredFilesExist from "./utilities/doRequiredFilesExists.ts";
 import { exportEnvironmentVariables } from "./utilities/exportEnvironmentVariables.ts";
 
 import { version } from "./version.ts";
@@ -27,15 +25,11 @@ export const environments: Environment[] = ["dev", "staging", "production"];
 export const localEnvironments: Environment[] = ["dev"];
 export const remoteEnvironments: Environment[] = ["staging", "production"];
 
-await doRequiredFilesExist();
 await exportEnvironmentVariables(".env");
+await exportEnvironmentVariables(app.dotfile);
 
 /** The project's environment variables represented as an object. */
 export const env = {
-	docker: {
-		/** The Docker container's name. */
-		container: Deno.env.get("DOCKER_CONTAINER") ?? undefined,
-	},
 	project: {
 		/** The project's primary site URL. */
 		url: (): URL | undefined => {
@@ -62,11 +56,12 @@ export const env = {
 	},
 };
 
-await doesDotfileExist();
-await exportEnvironmentVariables(app.dotfile);
-
 /** The project's dotfile variables represented as an object. */
 export const dotfile = {
+	docker: {
+		/** The Docker container's name. */
+		container: Deno.env.get("DOCKER_CONTAINER") ?? undefined,
+	},
 	/** The environment server's address or hostname. */
 	serverAddress: (environment: Environment): string => {
 		return Deno.env.get(`${environment.toUpperCase()}_SERVER_ADDRESS`) as string;

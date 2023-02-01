@@ -4,6 +4,7 @@ import environment from "../../arguments/environment.ts";
 import bootstrap from "../../bootstrap.ts";
 import LocalDatabase from "../../libraries/database/LocalDatabase.ts";
 import RemoteDatabase from "../../libraries/database/RemoteDatabase.ts";
+import getArgumentValue from "../../utilities/getArgumentValue.ts";
 
 /** The command definition. */
 const command: Command = {
@@ -21,9 +22,9 @@ const command: Command = {
  */
 async function run(args: Args) {
 	const userEnteredCommand = args._.shift() as string;
-	bootstrap(command, userEnteredCommand, args);
+	await bootstrap(command, userEnteredCommand, args);
 
-	const userEnteredEnvironment = environment.value as Environment;
+	const userEnteredEnvironment = getArgumentValue(environment, args) as Environment;
 
 	if (userEnteredEnvironment === "dev") {
 		const localDatabase = new LocalDatabase();

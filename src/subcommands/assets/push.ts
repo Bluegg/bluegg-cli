@@ -6,6 +6,7 @@ import remoteEnvironment from "../../arguments/remoteEnvironment.ts";
 import source from "../../arguments/source.ts";
 import bootstrap from "../../bootstrap.ts";
 import RemoteSync from "../../libraries/filesystem/RemoteSync.ts";
+import getArgumentValue from "../../utilities/getArgumentValue.ts";
 
 /** The command definition. */
 const command: Command = {
@@ -23,12 +24,12 @@ const command: Command = {
  */
 async function run(args: Args) {
 	const userEnteredCommand = args._.shift() as string;
-	bootstrap(command, userEnteredCommand, args);
+	await bootstrap(command, userEnteredCommand, args);
 
-	const userEnteredEnvironment = remoteEnvironment.value as Environment;
-	const userEnteredSource = source.value;
-	const userEnteredDestination = destination.value;
-	const userEnteredOptions = options.value;
+	const userEnteredEnvironment = getArgumentValue(remoteEnvironment, args) as Environment;
+	const userEnteredSource = getArgumentValue(source, args);
+	const userEnteredDestination = getArgumentValue(destination, args);
+	const userEnteredOptions = getArgumentValue(options, args);
 
 	const confirmed = confirm(
 		`Merge the ${bold(italic(userEnteredEnvironment))} assets with the ${

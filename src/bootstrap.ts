@@ -8,6 +8,8 @@ import {
 	noPossibleSubcommands,
 } from "./messages.ts";
 import areAllArgumentsProvided from "./utilities/areAllArgumentsProvided.ts";
+import doesDotfileExist from "./utilities/doesDotfileExist.ts";
+import doRequiredFilesExist from "./utilities/doRequiredFilesExists.ts";
 import getArgument from "./utilities/getArgument.ts";
 import getSubcommand from "./utilities/getSubcommand.ts";
 
@@ -18,12 +20,18 @@ import getSubcommand from "./utilities/getSubcommand.ts";
  * @param args The arguments entered by the user.
  */
 
-export default function bootstrap(command: Command, userEnteredCommand: string, args: Args) {
+export default async function bootstrap(command: Command, userEnteredCommand: string, args: Args) {
 	/** Immediately determine if the user has entered an argument for help. */
 	const userNeedsHelp = getArgument([help], args);
 
 	/** To be called when the user has requested help. */
 	const helpUser = () => (userNeedsHelp ? userNeedsHelp.run(command, args) : false);
+
+	/** Check if the application's required files exists before processing anything. */
+	const checkRequiredFiles = async () => {
+		await doRequiredFilesExist();
+		await doesDotfileExist();
+	};
 
 	/** Check if the user has entered any valid optional arguments. */
 	const validOptionalArguments = command.optionalArguments &&
@@ -34,7 +42,7 @@ export default function bootstrap(command: Command, userEnteredCommand: string, 
 		if (command.optionalArguments) {
 			/* Navigate through the list of optional arguments in order to determine if the user has
             entered any of the arguments in no specific order. */
-			command.optionalArguments.filter((argument) => {
+			command.optionalArguments.filter(async (argument) => {
 				/* Determine if any of the optional arguments have been provided by the user. */
 				const argumentProvided = argument.flags.some((key) =>
 					Object.keys(args).includes(key)
@@ -43,7 +51,10 @@ export default function bootstrap(command: Command, userEnteredCommand: string, 
 				/* If the user-entered argument is valid, run its callable function, otherwise inform
                 the user that it's invalid. */
 				const validArgument = getArgument([argument], args);
-				if (validArgument) validArgument.run(command, args);
+				if (validArgument) {
+					await checkRequiredFiles();
+					validArgument.run(command, args);
+				}
 
 				if (argumentProvided) return true;
 			});
@@ -55,7 +66,7 @@ export default function bootstrap(command: Command, userEnteredCommand: string, 
 		if (command.arguments) {
 			/* Navigate through the list of required arguments in order to determine if the user has
             entered any of the arguments in no specific order. */
-			command.arguments.filter((argument) => {
+			command.arguments.filter(async (argument) => {
 				/* Determine if any of the required arguments have been provided by the user. */
 				const argumentProvided = argument.flags.some((key) =>
 					Object.keys(args).includes(key)
@@ -64,7 +75,10 @@ export default function bootstrap(command: Command, userEnteredCommand: string, 
 				/* If the user-entered argument is valid, run its callable function, otherwise inform
                 the user that it's invalid. */
 				const validArgument = getArgument([argument], args);
-				if (validArgument) validArgument.run(command, args);
+				if (validArgument) {
+					await checkRequiredFiles();
+					validArgument.run(command, args);
+				}
 
 				if (argumentProvided) return true;
 
@@ -91,8 +105,10 @@ export default function bootstrap(command: Command, userEnteredCommand: string, 
 		/* If the user-entered command is valid, run its callable function, otherwise inform the
         user that it's invalid. However, if the user has requested help, display the usage
         instructions instead of throwing an error. */
-		if (validCommand) validCommand.run(args);
-		else if (userNeedsHelp) helpUser();
+		if (validCommand) {
+			await checkRequiredFiles();
+			await validCommand.run(args);
+		} else if (userNeedsHelp) helpUser();
 		else if (validOptionalArguments) runValidOptionalArguments();
 		else invalidSubcommand(userEnteredCommand);
 

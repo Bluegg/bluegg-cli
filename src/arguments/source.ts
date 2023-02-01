@@ -17,7 +17,6 @@ const argument: Argument = {
  */
 function run(_command: Command, args: Args) {
 	const source = getArgumentValue(argument, args);
-	argument.value = source;
 
 	return source;
 }

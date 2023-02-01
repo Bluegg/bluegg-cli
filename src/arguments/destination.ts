@@ -17,7 +17,6 @@ const argument: Argument = {
  */
 function run(_command: Command, args: Args) {
 	const directory = getArgumentValue(argument, args);
-	argument.value = directory;
 
 	return directory;
 }
