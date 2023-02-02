@@ -102,7 +102,8 @@ export default class RemoteDatabase {
 		}
 
 		const command =
-			`MYSQL_PWD=${this.password} mysql -u ${this.username} ${this.name} ${this.options}`;
+			`MYSQL_PWD=${this.password} mysql -u ${this.username} ${this.name} ${this.options}`
+				.trim();
 
 		const shell = new Shell(command, filepath);
 		const process = await shell.executeOnRemote(this.serverUsername, this.serverAddress);
@@ -121,7 +122,8 @@ export default class RemoteDatabase {
 	 */
 	async export() {
 		const command =
-			`MYSQL_PWD=${this.password} mysqldump -u ${this.username} ${this.name} ${this.options}`;
+			`MYSQL_PWD=${this.password} mysqldump -u ${this.username} ${this.name} ${this.options}`
+				.trim();
 		const filepath = await this.filepath;
 
 		const shell = new Shell(command, undefined, filepath);

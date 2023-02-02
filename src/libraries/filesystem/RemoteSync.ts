@@ -69,7 +69,8 @@ export default class RemoteSync {
 		console.log(`${gray(`Downloading ${remoteFilepath} to ${localFilepath}...`)}`);
 
 		const command =
-			`rsync -ah --stats ${this.options} ${this.serverUsername}@${this.serverAddress}:${remoteFilepath} ${localFilepath}`;
+			`rsync -ah --stats ${this.options} ${this.serverUsername}@${this.serverAddress}:${remoteFilepath} ${localFilepath}`
+				.trim();
 
 		const shell = new Shell(command);
 		const process = await shell.executeInLocal();
@@ -93,7 +94,8 @@ export default class RemoteSync {
 		console.log(`${gray(`Uploading ${localFilepath} to ${remoteFilepath}...`)}`);
 
 		const command =
-			`rsync -ah --stats ${this.options} ${localFilepath} ${this.serverUsername}@${this.serverAddress}:${remoteFilepath}`;
+			`rsync -ah --stats ${this.options} ${localFilepath} ${this.serverUsername}@${this.serverAddress}:${remoteFilepath}`
+				.trim();
 
 		const shell = new Shell(command);
 		const process = await shell.executeInLocal();

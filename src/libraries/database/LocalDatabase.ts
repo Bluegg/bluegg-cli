@@ -92,7 +92,8 @@ export default class LocalDatabase {
 		}
 
 		const command =
-			`mysql -h ${this.server} -P ${this.port} -u ${this.username} -p${this.password} ${this.name}`;
+			`mysql -h ${this.server} -P ${this.port} -u ${this.username} -p${this.password} ${this.name}`
+				.trim();
 
 		const shell = new Shell(command, filepath);
 		const process = await shell.executeInDocker(this.container);
@@ -111,7 +112,8 @@ export default class LocalDatabase {
 	 */
 	async export() {
 		const command =
-			`mysqldump -h ${this.server} -P ${this.port} -u ${this.username} -p${this.password} ${this.name} ${this.options}`;
+			`mysqldump -h ${this.server} -P ${this.port} -u ${this.username} -p${this.password} ${this.name} ${this.options}`
+				.trim();
 		const filepath = await this.filepath;
 
 		const shell = new Shell(command, undefined, filepath);
