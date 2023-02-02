@@ -41,20 +41,17 @@ export default async function bootstrap(command: Command, userEnteredCommand: st
 	const runValidOptionalArguments = () => {
 		if (command.optionalArguments) {
 			/* Navigate through the list of optional arguments in order to determine if the user has
-            entered any of the arguments in no specific order. */
-			command.optionalArguments.filter(async (argument) => {
+      entered any of the arguments in no specific order. */
+			command.optionalArguments.filter((argument) => {
 				/* Determine if any of the optional arguments have been provided by the user. */
 				const argumentProvided = argument.flags.some((key) =>
 					Object.keys(args).includes(key)
 				);
 
 				/* If the user-entered argument is valid, run its callable function, otherwise inform
-                the user that it's invalid. */
+        the user that it's invalid. */
 				const validArgument = getArgument([argument], args);
-				if (validArgument) {
-					await checkRequiredFiles();
-					validArgument.run(command, args);
-				}
+				if (validArgument) validArgument.run(command, args);
 
 				if (argumentProvided) return true;
 			});
@@ -65,20 +62,17 @@ export default async function bootstrap(command: Command, userEnteredCommand: st
 	const runValidRequiredArguments = () => {
 		if (command.arguments) {
 			/* Navigate through the list of required arguments in order to determine if the user has
-            entered any of the arguments in no specific order. */
-			command.arguments.filter(async (argument) => {
+      entered any of the arguments in no specific order. */
+			command.arguments.filter((argument) => {
 				/* Determine if any of the required arguments have been provided by the user. */
 				const argumentProvided = argument.flags.some((key) =>
 					Object.keys(args).includes(key)
 				);
 
 				/* If the user-entered argument is valid, run its callable function, otherwise inform
-                the user that it's invalid. */
+        the user that it's invalid. */
 				const validArgument = getArgument([argument], args);
-				if (validArgument) {
-					await checkRequiredFiles();
-					validArgument.run(command, args);
-				}
+				if (validArgument) validArgument.run(command, args);
 
 				if (argumentProvided) return true;
 
@@ -113,14 +107,14 @@ export default async function bootstrap(command: Command, userEnteredCommand: st
 		else invalidSubcommand(userEnteredCommand);
 
 		/* At the end of each check for the existence of subcommands, mark the validation as
-        successful in order to allow the application to validate the next subcommand(s). */
+    successful in order to allow the application to validate the next subcommand(s). */
 		return true;
 	}
 
 	/* If the user has requested help at any point within the argument entry process,
-    display the usage instructions instead of throwing an error. Checking for the help
-    request at this point in the validation process ensures that it will ignore any
-    validation errors within the argument's own callable function. */
+  display the usage instructions instead of throwing an error. Checking for the help
+  request at this point in the validation process ensures that it will ignore any
+  validation errors within the argument's own callable function. */
 	if (userNeedsHelp) helpUser();
 
 	runValidRequiredArguments();
