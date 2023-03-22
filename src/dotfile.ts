@@ -13,7 +13,24 @@ import doesFileExist from "./utilities/doesFileExist.ts";
  */
 export default async function createDotfile() {
 	const dotfileFilepath = `${Deno.cwd()}/${app.dotfile}`;
+	const oldDotfileFilepath = `${Deno.cwd()}/.bluegg`;
 	const projectName = env.project.name();
+
+	/* If the old bluegg dotfile already exists, we want to rename this to toward. */
+	if (await doesFileExist(oldDotfileFilepath)) {
+		new WarningMessage(`There's already a file named .bluegg in this directory.`);
+
+		const confirmed = confirm(`Update this file to ${bold(app.dotfile)}?`);
+		if (!confirmed) {
+			return false;
+		} else {
+			try {
+				await Deno.rename(oldDotfileFilepath, dotfileFilepath);
+			} catch (err) {
+				console.error(err);
+			}
+		}
+	}
 
 	/* If the dotfile already exists, confirm whether or not it should be overwritten. */
 	if (await doesFileExist(dotfileFilepath)) {

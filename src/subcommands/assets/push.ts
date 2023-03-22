@@ -32,12 +32,13 @@ async function run(args: Args) {
 	const userEnteredOptions = getArgumentValue(options, args);
 
 	const confirmed = confirm(
-		`Merge the ${bold(italic(userEnteredEnvironment))} assets with the ${
+		`Assets Push: Running this will merge the ${bold(italic("local"))} assets with the ${
 			bold(
-				italic("local"),
+				italic(userEnteredEnvironment),
 			)
-		} assets?`,
+		} assets. Enter ${bold(italic("y"))} to confirm.`,
 	);
+
 	if (!confirmed) return false;
 
 	const remoteSync = new RemoteSync(

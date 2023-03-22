@@ -6,19 +6,19 @@ import { version } from "./version.ts";
 /** The application's details represented as an object. */
 export const app = {
 	/** The base command used by the application. */
-	command: "bluegg",
+	command: "toward",
 	/** The application's current version (SemVer). */
 	version,
 	/** The application's dotfile name. */
-	dotfile: ".bluegg",
+	dotfile: ".toward",
 	/** The name of the application. */
-	name: "Bluegg CLI",
+	name: "Toward CLI",
 	/** The description of the application. */
-	description: "The command-line companion for worthy developers at Bluegg. 🤖",
+	description: "The command-line companion for worthy developers at Toward. 🤖",
 	/** The author(s) of the application. */
-	author: "Bluegg Development Team",
+	author: "Toward Development Team",
 	/** The contact details of the application's author(s). */
-	contact: "dev@bluegg.co.uk",
+	contact: "dev@toward.studio",
 };
 
 export const environments: Environment[] = ["dev", "staging", "production"];
