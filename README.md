@@ -88,14 +88,26 @@ deno fmt
 deno compile --allow-read --allow-write --allow-run --allow-env --output toward main.ts
 ```
 
-6. Once all changes are committed, create a Tag and Release in GitHub. Both should follow the
+6. You can test your local changes by creating an alias:
+
+```sh
+alias towardcli="deno run --allow-read --allow-write --allow-run --allow-env <path to main.ts>"
+```
+
+7. You then can run that within any project with subcommands to make sure your updates work:
+
+```sh
+towardcli assets pull -e staging
+```
+
+8. Once all changes are committed, create a Tag and Release in GitHub. Both should follow the
    standard SemVer naming convention, E.G. `v1.2.3`. Use detailed release descriptions, following by
    the example of earlier releases.
 
-7. Underneath the release notes, attach the previously generated `toward` binary.
+9. Underneath the release notes, attach the previously generated `toward` binary.
 
-8. Open the Release's Assets, and **make a note** of the `toward` binary's URL. This will be needed
-   when updating the Tap.
+10. Open the Release's Assets, and **make a note** of the `toward` binary's URL. This will be needed
+    when updating the Tap.
 
-9. Finish-up by updating [Toward's Homebrew Tap](https://github.com/towardstudio/homebrew-bluegg).
-   Head to the repository for detailed instructions.
+11. Finish-up by updating [Toward's Homebrew Tap](https://github.com/towardstudio/homebrew-bluegg).
+    Head to the repository for detailed instructions.

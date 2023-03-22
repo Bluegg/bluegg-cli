@@ -1,4 +1,4 @@
-import { config } from "../../deps.ts";
+import { load } from "../../deps.ts";
 
 /**
  * Exports the environment variables from a given file for use throughout the application.
@@ -7,7 +7,10 @@ import { config } from "../../deps.ts";
  * @returns Whether or not the process was successful.
  */
 export async function exportEnvironmentVariables(filepath: string) {
-	await config({ path: filepath, export: true });
-
+	await load({
+		envPath: filepath,
+		allowEmptyValues: true,
+		export: true,
+	});
 	return true;
 }

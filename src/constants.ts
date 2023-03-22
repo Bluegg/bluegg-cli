@@ -9,6 +9,8 @@ export const app = {
 	command: "toward",
 	/** The application's current version (SemVer). */
 	version,
+	/** The application's old dotfile name. */
+	oldDotfile: ".bluegg",
 	/** The application's dotfile name. */
 	dotfile: ".toward",
 	/** The name of the application. */

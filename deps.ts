@@ -1,5 +1,5 @@
 /* Loads all environment variables from the selected files into the process. */
-export { config } from "https://deno.land/std@0.174.0/dotenv/mod.ts";
+export { load } from "https://deno.land/std/dotenv/mod.ts";
 /* A command line arguments parser. */
 export { parse as parseArgs } from "https://deno.land/std/flags/mod.ts";
 export type { Args } from "https://deno.land/std/flags/mod.ts";

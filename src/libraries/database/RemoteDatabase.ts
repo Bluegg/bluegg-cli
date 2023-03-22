@@ -109,7 +109,7 @@ export default class RemoteDatabase {
 		const process = await shell.executeOnRemote(this.serverUsername, this.serverAddress);
 
 		if (process.success) {
-			new SuccessMessage(`Remote database imported successfully.`);
+			new SuccessMessage(`Remote database updated successfully.`);
 		} else new ErrorMessage(`Unable to import remote database.`);
 
 		return filepath;
