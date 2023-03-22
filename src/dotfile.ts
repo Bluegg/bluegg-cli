@@ -7,11 +7,30 @@ import WarningMessage from "./libraries/messages/WarningMessage.ts";
 import doesFileExist from "./utilities/doesFileExist.ts";
 
 /**
+ * Rename the dotfile.
+ *
+ * @returns Whether or not the rename of the dotfile was successful.
+ */
+export async function renameDotfile() {
+	const oldDotfileFilepath = `${Deno.cwd()}/${app.oldDotfile}`;
+	const dotfileFilepath = `${Deno.cwd()}/${app.dotfile}`;
+
+	try {
+		await Deno.rename(oldDotfileFilepath, dotfileFilepath);
+	} catch (err) {
+		console.error(err);
+		return false;
+	}
+
+	return true;
+}
+
+/**
  * Creates the dotfile using a series of user-entered values.
  *
  * @returns Whether or not the creation of the dotfile was successful.
  */
-export default async function createDotfile() {
+export async function createDotfile() {
 	const dotfileFilepath = `${Deno.cwd()}/${app.dotfile}`;
 	const projectName = env.project.name();
 

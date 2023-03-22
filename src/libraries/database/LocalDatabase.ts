@@ -99,7 +99,7 @@ export default class LocalDatabase {
 		const process = await shell.executeInDocker(this.container);
 
 		if (process.success) {
-			new SuccessMessage("Local database imported successfully.");
+			new SuccessMessage("Local database updated successfully.");
 		} else new ErrorMessage("Unable to import local database.");
 
 		return filepath;

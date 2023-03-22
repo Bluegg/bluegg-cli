@@ -3,12 +3,11 @@
 <br />
 
 <div align="center">
-    <a href="https://github.com/Bluegg/bluegg-cli">
-        <img src="https://bluegg.co.uk/images/logo.svg" alt="The Project's Logo" width="160">
+    <a href="https://github.com/towardstudio/toward-cli">
+        <h3 align="center">Toward CLI</h3>
     </a>
-    <h3 align="center">Bluegg CLI</h3>
-    <p align="center">The command-line companion for worthy developers at Bluegg. 🤖</p>
-    <a align="center" href="https://github.com/Bluegg/bluegg-open-source-disclaimer">Open Source Disclaimer</a>
+    <p align="center">The command-line companion for worthy developers at Toward. 🤖</p>
+    <a align="center" href="https://github.com/towardstudio/toward-open-source-disclaimer">Open Source Disclaimer</a>
 </div>
 
 <br />
@@ -22,7 +21,7 @@
 Installation of this tool as a Formula using [Homebrew](https://brew.sh) is strongly recommended.
 
 ```sh
-brew install Bluegg/bluegg/bluegg-cli
+brew install Toward/towardstudio/toward-cli
 ```
 
 ### Usage
@@ -30,7 +29,7 @@ brew install Bluegg/bluegg/bluegg-cli
 To get started, run the following.
 
 ```sh
-bluegg --help
+toward --help
 ```
 
 ### Updating
@@ -38,13 +37,13 @@ bluegg --help
 You can update the Formula using Homebrew.
 
 ```sh
-brew upgrade bluegg-cli
+brew upgrade toward-cli
 ```
 
 Then confirm you're running the desired version.
 
 ```sh
-bluegg --version
+toward --version
 ```
 
 ## For Developers
@@ -64,7 +63,7 @@ brew install deno
 1. Clone this repository.
 
 ```sh
-git clone git@github.com:Bluegg/bluegg-cli.git bluegg-cli
+git clone git@github.com:towardstudio/toward-cli.git toward-cli
 ```
 
 2. Before committing any changes, _always_ run Deno's built-in linter at the project's root, and
@@ -83,30 +82,32 @@ deno fmt
 4. When everything is ready for release, update the `version` value in
    [`/src/version.ts`](/src/version.ts).
 
-5. Compile the code into a self-contained executable named `bluegg` at the project's root.
+5. Compile the code into a self-contained executable named `toward` at the project's root.
 
 ```sh
-deno compile --allow-read --allow-write --allow-run --allow-env --output bluegg main.ts
+deno compile --allow-read --allow-write --allow-run --allow-env --output toward main.ts
 ```
 
-6. Once all changes are committed, create a Tag and Release in GitHub. Both should follow the
+6. You can test your local changes by creating an alias:
+
+```sh
+alias towardcli="deno run --allow-read --allow-write --allow-run --allow-env <path to main.ts>"
+```
+
+7. You then can run that within any project with subcommands to make sure your updates work:
+
+```sh
+towardcli assets pull -e staging
+```
+
+8. Once all changes are committed, create a Tag and Release in GitHub. Both should follow the
    standard SemVer naming convention, E.G. `v1.2.3`. Use detailed release descriptions, following by
    the example of earlier releases.
 
-7. Underneath the release notes, attach the previously generated `bluegg` binary.
+9. Underneath the release notes, attach the previously generated `toward` binary.
 
-8. Open the Release's Assets, and **make a note** of the `bluegg` binary's URL. This will be needed
-   when updating the Tap.
+10. Open the Release's Assets, and **make a note** of the `toward` binary's URL. This will be needed
+    when updating the Tap.
 
-9. Finish-up by updating [Bluegg's Homebrew Tap](https://github.com/Bluegg/homebrew-bluegg). Head to
-   the repository for detailed instructions.
-
-<!-- BLUEGG LOGO -->
-
-<br />
-
-<p align="center">
-    <a href="https://bluegg.co.uk" target="_blank">
-        <img src="https://bluegg.co.uk/apple-touch-icon.png" alt="Logo" width="40" height="40" style="border-radius: 0.5rem;">
-    </a>
-</p>
+11. Finish-up by updating [Toward's Homebrew Tap](https://github.com/towardstudio/homebrew-bluegg).
+    Head to the repository for detailed instructions.

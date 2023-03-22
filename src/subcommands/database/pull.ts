@@ -29,7 +29,7 @@ async function run(args: Args) {
 	const userEnteredOptions = getArgumentValue(options, args);
 
 	const confirmed = confirm(
-		`Overwrite the ${bold(italic("local"))} database with the ${
+		`DB Pull: Overwrite the ${bold(italic("local"))} database with the ${
 			bold(
 				italic(userEnteredEnvironment),
 			)
