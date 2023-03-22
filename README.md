@@ -21,7 +21,7 @@
 Installation of this tool as a Formula using [Homebrew](https://brew.sh) is strongly recommended.
 
 ```sh
-brew install Toward/towardstudio/toward-cli
+brew install towardstudio/toward/toward-cli
 ```
 
 ### Usage
