@@ -8,6 +8,7 @@ import SuccessMessage from "../messages/SuccessMessage.ts";
 import Shell from "../Shell.ts";
 
 export default class RemoteDatabase {
+	private serverIp: string;
 	private serverUsername: string;
 	private serverAddress: string;
 	private username: string;
@@ -21,6 +22,7 @@ export default class RemoteDatabase {
 	public filepath: Promise<string>;
 
 	constructor(environment: Environment, options?: string) {
+		this.serverIp = promptIfEmpty("Server IP Address", dotfile.serverIp(environment));
 		this.serverUsername = promptIfEmpty(
 			"Server SSH Username",
 			dotfile.serverUsername(environment),
@@ -106,7 +108,7 @@ export default class RemoteDatabase {
 				.trim();
 
 		const shell = new Shell(command, filepath);
-		const process = await shell.executeOnRemote(this.serverUsername, this.serverAddress);
+		const process = await shell.executeOnRemote(this.serverUsername, this.serverIp);
 
 		if (process.success) {
 			new SuccessMessage(`Remote database updated successfully.`);
@@ -127,7 +129,7 @@ export default class RemoteDatabase {
 		const filepath = await this.filepath;
 
 		const shell = new Shell(command, undefined, filepath);
-		const process = await shell.executeOnRemote(this.serverUsername, this.serverAddress);
+		const process = await shell.executeOnRemote(this.serverUsername, this.serverIp);
 
 		if (process.success) {
 			new SuccessMessage(`Remote database exported successfully. ${gray(this.filename)}`);

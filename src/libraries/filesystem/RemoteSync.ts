@@ -7,6 +7,7 @@ import SuccessMessage from "../messages/SuccessMessage.ts";
 import Shell from "../Shell.ts";
 
 export default class RemoteSync {
+	private serverIp: string;
 	private serverUsername: string;
 	private serverAddress: string;
 	private environment: Environment;
@@ -17,6 +18,7 @@ export default class RemoteSync {
 	public remoteFilepath: string;
 
 	constructor(environment: Environment, source?: string, destination?: string, options?: string) {
+		this.serverIp = promptIfEmpty("Server IP Address", dotfile.serverIp(environment));
 		this.serverUsername = promptIfEmpty(
 			"Server SSH Username",
 			dotfile.serverUsername(environment),
@@ -69,7 +71,7 @@ export default class RemoteSync {
 		console.log(`${gray(`Downloading ${remoteFilepath} to ${localFilepath}...`)}`);
 
 		const command =
-			`rsync -ah --stats ${this.options} ${this.serverUsername}@${this.serverAddress}:${remoteFilepath} ${localFilepath}`
+			`rsync -ah --stats ${this.options} ${this.serverUsername}@${this.serverIp}:${remoteFilepath} ${localFilepath}`
 				.trim();
 
 		const shell = new Shell(command);
@@ -94,7 +96,7 @@ export default class RemoteSync {
 		console.log(`${gray(`Uploading ${localFilepath} to ${remoteFilepath}...`)}`);
 
 		const command =
-			`rsync -ah --stats ${this.options} ${localFilepath} ${this.serverUsername}@${this.serverAddress}:${remoteFilepath}`
+			`rsync -ah --stats ${this.options} ${localFilepath} ${this.serverUsername}@${this.serverIp}:${remoteFilepath}`
 				.trim();
 
 		const shell = new Shell(command);

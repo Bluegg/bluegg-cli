@@ -7,7 +7,7 @@ import ErrorMessage from "./libraries/messages/ErrorMessage.ts";
 export function missingSubcommand() {
 	new ErrorMessage(
 		`Enter a recognised subcommand or argument(s). Use ${bold("--help")} for help.`,
-		true
+		true,
 	);
 }
 
@@ -18,10 +18,12 @@ export function missingSubcommand() {
  */
 export function invalidSubcommand(subcommand: string) {
 	new ErrorMessage(
-		`"${subcommand}" is ${bold("--not")} a recognised subcommand. Use ${bold(
-			"--help"
-		)} for help.`,
-		true
+		`"${subcommand}" is ${bold("--not")} a recognised subcommand. Use ${
+			bold(
+				"--help",
+			)
+		} for help.`,
+		true,
 	);
 }
 
@@ -31,7 +33,7 @@ export function invalidSubcommand(subcommand: string) {
 export function noPossibleSubcommands() {
 	new ErrorMessage(
 		`There are no possible subcommands available. Use ${bold("--help")} for help.`,
-		true
+		true,
 	);
 }
 
@@ -41,6 +43,6 @@ export function noPossibleSubcommands() {
 export function missingArguments() {
 	new ErrorMessage(
 		`At least one required argument is missing. Use ${bold("--help")} for help.`,
-		true
+		true,
 	);
 }

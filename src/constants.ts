@@ -64,6 +64,10 @@ export const dotfile = {
 		/** The Docker container's name. */
 		container: Deno.env.get("DOCKER_CONTAINER") ?? undefined,
 	},
+	/** The environment server's IP. */
+	serverIp: (environment: Environment): string => {
+		return Deno.env.get(`${environment.toUpperCase()}_SERVER_IP`) as string;
+	},
 	/** The environment server's address or hostname. */
 	serverAddress: (environment: Environment): string => {
 		return Deno.env.get(`${environment.toUpperCase()}_SERVER_ADDRESS`) as string;

@@ -51,6 +51,8 @@ export async function createDotfile() {
 		`ddev-${projectName}-web`,
 	);
 
+	const stagingServerIp = prompt(`Enter the ${bold(italic("staging"))} server's IP address:`);
+
 	const stagingServerAddress = prompt(
 		`Enter the ${bold(italic("staging"))} server's SSH address:`,
 		`staging.${projectName}.com` ?? undefined,
@@ -78,6 +80,10 @@ export async function createDotfile() {
 
 	const stagingDatabasePassword = prompt(
 		`Enter the ${bold(italic("staging"))} server's database password:`,
+	);
+
+	const productionServerIp = prompt(
+		`Enter the ${bold(italic("production"))} server's IP address:`,
 	);
 
 	const productionServerAddress = prompt(
@@ -114,6 +120,7 @@ export async function createDotfile() {
 		"# The Docker container's name",
 		`DOCKER_CONTAINER=${dockerContainer}`,
 		"\n# Details and credentials for the project's staging server",
+		`STAGING_SERVER_IP=${stagingServerIp}`,
 		`STAGING_SERVER_ADDRESS=${stagingServerAddress}`,
 		`STAGING_SERVER_USERNAME=${stagingServerUsername}`,
 		`STAGING_SITE_DIRECTORY=${stagingSiteDirectory}`,
@@ -121,6 +128,7 @@ export async function createDotfile() {
 		`STAGING_DATABASE_USERNAME=${stagingDatabaseUsername}`,
 		`STAGING_DATABASE_PASSWORD=${stagingDatabasePassword}`,
 		"\n# Details and credentials for the project's production server",
+		`PRODUCTION_SERVER_IP=${productionServerIp}`,
 		`PRODUCTION_SERVER_ADDRESS=${productionServerAddress}`,
 		`PRODUCTION_SERVER_USERNAME=${productionServerUsername}`,
 		`PRODUCTION_SITE_DIRECTORY=${productionSiteDirectory}`,
