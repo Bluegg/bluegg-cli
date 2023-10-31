@@ -1,5 +1,11 @@
 {
-  "version": "2",
+  "version": "3",
+  "redirects": {
+    "https://deno.land/std/dotenv/mod.ts": "https://deno.land/std@0.180.0/dotenv/mod.ts",
+    "https://deno.land/std/flags/mod.ts": "https://deno.land/std@0.180.0/flags/mod.ts",
+    "https://deno.land/std/fmt/colors.ts": "https://deno.land/std@0.180.0/fmt/colors.ts",
+    "https://deno.land/std/streams/write_all.ts": "https://deno.land/std@0.180.0/streams/write_all.ts"
+  },
   "remote": {
     "https://deno.land/std@0.132.0/_util/assert.ts": "e94f2eb37cebd7f199952e242c77654e43333c1ac4c5c700e929ea3aa5489f74",
     "https://deno.land/std@0.132.0/dotenv/mod.ts": "5749c0c17ba03f977ce04439409107e7fd6de974b8f1208c6644f30c9699505e",

@@ -64,6 +64,10 @@ export const dotfile = {
 		/** The Docker container's name. */
 		container: Deno.env.get("DOCKER_CONTAINER") ?? undefined,
 	},
+	assets: {
+		/** The Assets file path */
+		filepath: Deno.env.get("ASSET_PATH") ?? "web/assets",
+	},
 	/** The environment server's IP. */
 	serverIp: (environment: Environment): string => {
 		return Deno.env.get(`${environment.toUpperCase()}_SERVER_IP`) as string;
@@ -108,6 +112,6 @@ export const defaults = {
 	defaultLocalAssetsDirectory: `web/assets`,
 	/** The default directory in which remote assets should be located. */
 	defaultRemoteAssetsDirectory: (environment: Environment): string => {
-		return `${dotfile.serverAddress(environment)}/shared/web/assets`;
+		return `${dotfile.serverAddress(environment)}/shared/${dotfile.assets.filepath}`;
 	},
 };

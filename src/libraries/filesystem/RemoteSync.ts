@@ -41,7 +41,7 @@ export default class RemoteSync {
 	 * @returns The local assets filepath.
 	 */
 	private _localFilepath() {
-		const path = defaults.defaultLocalAssetsDirectory;
+		const path = dotfile.assets.filepath;
 
 		return path;
 	}
