@@ -46,6 +46,34 @@ Then confirm you're running the desired version.
 toward --version
 ```
 
+## Example Toward File
+
+```sh
+# The Docker container's name
+DOCKER_CONTAINER=
+
+/** The Assets file path */
+ASSET_PATH=web/assets
+
+# Details and credentials for the project's staging server
+STAGING_SERVER_IP=
+STAGING_SERVER_ADDRESS=
+STAGING_SERVER_USERNAME=
+STAGING_SITE_DIRECTORY=
+STAGING_DATABASE_NAME=
+STAGING_DATABASE_USERNAME=
+STAGING_DATABASE_PASSWORD=
+
+# Details and credentials for the project's production server
+PRODUCTION_SERVER_IP=
+PRODUCTION_SERVER_ADDRESS=
+PRODUCTION_SERVER_USERNAME=
+PRODUCTION_SITE_DIRECTORY=
+PRODUCTION_DATABASE_NAME=
+PRODUCTION_DATABASE_USERNAME=
+PRODUCTION_DATABASE_PASSWORD=
+```
+
 ## For Developers
 
 ### Requirements
