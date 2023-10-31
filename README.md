@@ -52,7 +52,7 @@ toward --version
 # The Docker container's name
 DOCKER_CONTAINER=
 
-/** The Assets file path */
+# The Assets file path
 ASSET_PATH=web/assets
 
 # Details and credentials for the project's staging server
