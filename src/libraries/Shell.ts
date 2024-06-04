@@ -69,11 +69,18 @@ export default class Shell {
 		const { success, stdout, stderr } = await subprocess.output();
 
 		/* Decode the command's output and error output as text strings. */
-		const standardOutputValue = new TextDecoder().decode(stdout);
+		let standardOutputValue = new TextDecoder().decode(stdout);
 		const standardErrorValue = new TextDecoder().decode(stderr);
 
 		/* If any output is returned, display the output or write it to the file specified. */
 		if (this.output && standardOutputValue) {
+            /* Maria DB Hack */
+            if (standardOutputValue.includes("enable the sandbox mode")) {
+                var lines = standardOutputValue.split('\n');
+                lines.splice(0,1);
+                standardOutputValue = lines.join('\n');
+            }
+            // Upload the file to the database
 			await Deno.writeTextFile(this.output, standardOutputValue);
 		} else if (standardOutputValue) console.log(standardOutputValue);
 
