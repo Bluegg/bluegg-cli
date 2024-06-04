@@ -75,11 +75,13 @@ export default class RemoteSync {
 				.trim();
 
 		const shell = new Shell(command);
-		const process = await shell.executeInLocal();
+		const success = await shell.executeInLocal();
 
-		if (process.success) {
+		if (success) {
 			new SuccessMessage("Remote assets downloaded successfully.");
-		} else new ErrorMessage("Unable to download remote assets.");
+		} else {
+			new ErrorMessage("Unable to download remote assets.");
+		}
 
 		return localFilepath;
 	}
@@ -100,11 +102,13 @@ export default class RemoteSync {
 				.trim();
 
 		const shell = new Shell(command);
-		const process = await shell.executeInLocal();
+		const success = await shell.executeInLocal();
 
-		if (process.success) {
+		if (success) {
 			new SuccessMessage("Local assets uploaded successfully.");
-		} else new ErrorMessage("Unable to upload local assets.");
+		} else {
+			new ErrorMessage("Unable to upload local assets.");
+		}
 
 		return remoteFilepath;
 	}

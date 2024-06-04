@@ -108,11 +108,13 @@ export default class RemoteDatabase {
 				.trim();
 
 		const shell = new Shell(command, filepath);
-		const process = await shell.executeOnRemote(this.serverUsername, this.serverIp);
+		const success = await shell.executeOnRemote(this.serverUsername, this.serverIp);
 
-		if (process.success) {
+		if (success) {
 			new SuccessMessage(`Remote database updated successfully.`);
-		} else new ErrorMessage(`Unable to import remote database.`);
+		} else {
+			new ErrorMessage(`Unable to import remote database.`);
+		}
 
 		return filepath;
 	}
@@ -129,11 +131,13 @@ export default class RemoteDatabase {
 		const filepath = await this.filepath;
 
 		const shell = new Shell(command, undefined, filepath);
-		const process = await shell.executeOnRemote(this.serverUsername, this.serverIp);
+		const success = await shell.executeOnRemote(this.serverUsername, this.serverIp);
 
-		if (process.success) {
+		if (success) {
 			new SuccessMessage(`Remote database exported successfully. ${gray(this.filename)}`);
-		} else new ErrorMessage(`Unable to export remote database.`);
+		} else {
+			new ErrorMessage(`Unable to export remote database.`);
+		}
 
 		return filepath;
 	}

@@ -96,11 +96,14 @@ export default class LocalDatabase {
 				.trim();
 
 		const shell = new Shell(command, filepath);
-		const process = await shell.executeInDocker(this.container);
 
-		if (process.success) {
+		const success = await shell.executeInDocker(this.container);
+
+		if (success) {
 			new SuccessMessage("Local database updated successfully.");
-		} else new ErrorMessage("Unable to import local database.");
+		} else {
+			new ErrorMessage("Unable to import local database.");
+		}
 
 		return filepath;
 	}
@@ -117,11 +120,13 @@ export default class LocalDatabase {
 		const filepath = await this.filepath;
 
 		const shell = new Shell(command, undefined, filepath);
-		const process = await shell.executeInDocker(this.container);
+		const success = await shell.executeInDocker(this.container);
 
-		if (process.success) {
+		if (success) {
 			new SuccessMessage(`Local database exported successfully. ${gray(this.filename)}`);
-		} else new ErrorMessage("Unable to export local database.");
+		} else {
+			new ErrorMessage("Unable to export local database.");
+		}
 
 		return filepath;
 	}

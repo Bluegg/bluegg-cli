@@ -1,4 +1,3 @@
-import { writeAll } from "../../deps.ts";
 import ErrorMessage from "./messages/ErrorMessage.ts";
 
 export default class Shell {
@@ -32,39 +31,56 @@ export default class Shell {
 		const expression = / +(?=(?:(?:[^"]*"){2})*[^"]*$)/g;
 
 		/* The Deno subprocess. */
-		const subprocess = Deno.run({
-			cmd: command.split(expression),
+		const processArgs = command.split(expression);
+		const processExc = processArgs.shift() as string;
+		const processCommand = new Deno.Command(processExc, {
+			args: processArgs,
 			stdin: "piped",
 			stdout: "piped",
 			stderr: "piped",
 		});
 
-		/* If any input is provided, pass it to the subprocess. */
+		const subprocess = processCommand.spawn();
+
 		if (this.input) {
-			await writeAll(subprocess.stdin, await Deno.readFile(this.input as string));
+			const writer = subprocess.stdin.getWriter();
+			const file = await Deno.readFile(this.input as string);
+
+			writer.ready
+				.then(() => {
+					writer.write(file);
+				})
+				.catch((err) => {
+					console.log("Chunk error:", err);
+				});
+
+			writer.ready
+				.then(() => {
+					writer.close();
+				})
+				.catch((err) => {
+					console.log("Stream error:", err);
+					return false;
+				});
+		} else {
 			subprocess.stdin.close();
 		}
 
-		/* Await and store the command's status, output, and error output. */
-		const [processStatus, standardOutput, standardError] = await Promise.all([
-			subprocess.status(),
-			subprocess.output(),
-			subprocess.stderrOutput(),
-		]);
+		const { success, stdout, stderr } = await subprocess.output();
 
 		/* Decode the command's output and error output as text strings. */
-		const standardOutputValue = new TextDecoder().decode(standardOutput);
-		const standardErrorValue = new TextDecoder().decode(standardError);
-
-		/* If an error is returned, display the error output and exit. */
-		if (standardErrorValue) new ErrorMessage(standardErrorValue, true);
+		const standardOutputValue = new TextDecoder().decode(stdout);
+		const standardErrorValue = new TextDecoder().decode(stderr);
 
 		/* If any output is returned, display the output or write it to the file specified. */
 		if (this.output && standardOutputValue) {
 			await Deno.writeTextFile(this.output, standardOutputValue);
 		} else if (standardOutputValue) console.log(standardOutputValue);
 
-		return processStatus;
+		/* If an error is returned, display the error output and exit. */
+		if (standardErrorValue) new ErrorMessage(standardErrorValue, true);
+
+		return success;
 	}
 
 	/**
