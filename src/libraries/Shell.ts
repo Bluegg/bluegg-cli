@@ -74,13 +74,13 @@ export default class Shell {
 
 		/* If any output is returned, display the output or write it to the file specified. */
 		if (this.output && standardOutputValue) {
-            /* Maria DB Hack */
-            if (standardOutputValue.includes("enable the sandbox mode")) {
-                var lines = standardOutputValue.split('\n');
-                lines.splice(0,1);
-                standardOutputValue = lines.join('\n');
-            }
-            // Upload the file to the database
+			/* Maria DB Hack */
+			if (standardOutputValue.includes("enable the sandbox mode")) {
+				const lines = standardOutputValue.split("\n");
+				lines.splice(0, 1);
+				standardOutputValue = lines.join("\n");
+			}
+			// Upload the file to the database
 			await Deno.writeTextFile(this.output, standardOutputValue);
 		} else if (standardOutputValue) console.log(standardOutputValue);
 
