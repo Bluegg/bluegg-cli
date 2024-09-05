@@ -123,8 +123,14 @@ export default class RemoteDatabase {
 	 * @returns The exported SQL file's filepath.
 	 */
 	async export() {
+		const checkCommand = `command -v mariadb-dump &> /dev/null`;
+		const checkShell = new Shell(checkCommand);
+		const mariaDBSuccess = await checkShell.executeOnRemote(this.serverUsername, this.serverIp);
+
+		const databaseCommand = mariaDBSuccess ? "mariadb-dump" : "mysqldump";
+
 		const command =
-			`MYSQL_PWD=${this.password} mariadb-dump -u ${this.username} ${this.name} ${this.options}`.trim();
+			`MYSQL_PWD=${this.password} ${databaseCommand} -u ${this.username} ${this.name} ${this.options}`.trim();
 		const filepath = await this.filepath;
 
 		const shell = new Shell(command, undefined, filepath);

@@ -91,10 +91,9 @@ export default class LocalDatabase {
 		}
 
 		const command =
-			`mysql -h ${this.server} -P ${this.port} -u ${this.username} -p${this.password} ${this.name}`.trim();
+			`mariadb -h ${this.server} -P ${this.port} -u ${this.username} -p${this.password} ${this.name}`.trim();
 
 		const shell = new Shell(command, filepath);
-
 		const success = await shell.executeInDocker(this.container);
 
 		if (success) {
