@@ -73,7 +73,8 @@ export default class LocalDatabase {
 	 * @returns The database export's filepath.
 	 */
 	private async _filepath() {
-		const path = `${defaults.defaultDatabaseExportsDirectory}/${this.environment}/${this.datestamp}`;
+		const path =
+			`${defaults.defaultDatabaseExportsDirectory}/${this.environment}/${this.datestamp}`;
 
 		if ((await doesFileExist(path)) === false) await Deno.mkdir(path, { recursive: true });
 		return `${path}/${this.filename}`;
@@ -91,7 +92,8 @@ export default class LocalDatabase {
 		}
 
 		const command =
-			`mariadb -h ${this.server} -P ${this.port} -u ${this.username} -p${this.password} ${this.name}`.trim();
+			`mariadb -h ${this.server} -P ${this.port} -u ${this.username} -p${this.password} ${this.name}`
+				.trim();
 
 		const shell = new Shell(command, filepath);
 		const success = await shell.executeInDocker(this.container);
@@ -112,7 +114,8 @@ export default class LocalDatabase {
 	 */
 	async export() {
 		const command =
-			`mariadb-dump -h ${this.server} -P ${this.port} -u ${this.username} -p${this.password} ${this.name} ${this.options}`.trim();
+			`mariadb-dump -h ${this.server} -P ${this.port} -u ${this.username} -p${this.password} ${this.name} ${this.options}`
+				.trim();
 		const filepath = await this.filepath;
 
 		const shell = new Shell(command, undefined, filepath);

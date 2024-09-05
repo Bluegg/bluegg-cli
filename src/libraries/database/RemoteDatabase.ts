@@ -25,19 +25,19 @@ export default class RemoteDatabase {
 		this.serverIp = promptIfEmpty("Server IP Address", dotfile.serverIp(environment));
 		this.serverUsername = promptIfEmpty(
 			"Server SSH Username",
-			dotfile.serverUsername(environment)
+			dotfile.serverUsername(environment),
 		);
 		this.serverAddress = promptIfEmpty(
 			"Server SSH address",
-			dotfile.serverAddress(environment)
+			dotfile.serverAddress(environment),
 		);
 		this.username = promptIfEmpty(
 			"Remote database username",
-			dotfile.databaseUsername(environment)
+			dotfile.databaseUsername(environment),
 		);
 		this.password = promptIfEmpty(
 			"Remote database password",
-			dotfile.databasePassword(environment)
+			dotfile.databasePassword(environment),
 		);
 		this.name = promptIfEmpty("Remote database name", dotfile.databaseName(environment));
 		this.environment = environment;
@@ -85,7 +85,8 @@ export default class RemoteDatabase {
 	 * @returns The database export's filepath.
 	 */
 	private async _filepath() {
-		const path = `${defaults.defaultDatabaseExportsDirectory}/${this.environment}/${this.datestamp}`;
+		const path =
+			`${defaults.defaultDatabaseExportsDirectory}/${this.environment}/${this.datestamp}`;
 
 		if ((await doesFileExist(path)) === false) await Deno.mkdir(path, { recursive: true });
 		return `${path}/${this.filename}`;
@@ -103,7 +104,8 @@ export default class RemoteDatabase {
 		}
 
 		const command =
-			`MYSQL_PWD=${this.password} mysql -u ${this.username} ${this.name} ${this.options}`.trim();
+			`MYSQL_PWD=${this.password} mysql -u ${this.username} ${this.name} ${this.options}`
+				.trim();
 
 		const shell = new Shell(command, filepath);
 		const success = await shell.executeOnRemote(this.serverUsername, this.serverIp);
@@ -130,7 +132,8 @@ export default class RemoteDatabase {
 		const databaseCommand = mariaDBSuccess ? "mariadb-dump" : "mysqldump";
 
 		const command =
-			`MYSQL_PWD=${this.password} ${databaseCommand} -u ${this.username} ${this.name} ${this.options}`.trim();
+			`MYSQL_PWD=${this.password} ${databaseCommand} -u ${this.username} ${this.name} ${this.options}`
+				.trim();
 		const filepath = await this.filepath;
 
 		const shell = new Shell(command, undefined, filepath);
